@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block title %}Login · NFSU Placement Portal{% endblock %}
+{% block content %}<section class="login-wrap"><div class="login-card"><p class="eyebrow">PLACEMENT CELL · 2026–27</p><h1>Welcome back</h1><p class="muted">Sign in to manage student placement records.</p><form method="post" class="form"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Email<input name="email" type="email" autocomplete="username" required></label>
+<label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+<button class="btn btn-primary" type="submit">Sign in</button></form><div class="demo-note"><b>Local demo account</b><br>admin@nfsu.local<br>ChangeMe123!</div></div></section>{% endblock %}

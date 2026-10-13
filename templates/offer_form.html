@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block content %}<section class="pagehead"><div><p class="eyebrow">RECRUITMENT</p><h1>Record an offer</h1><p class="muted">The server evaluates known placement restrictions before saving.</p></div></section>
+{% if result %}<section class="policy-box {{ 'pass' if result.allowed else 'blocked' }}"><h2>{{ 'Policy check passed' if result.allowed else 'Policy review required' }}</h2><ul>{% for reason in result.reasons %}<li>{{ reason }}</li>{% endfor %}</ul></section>{% endif %}
+<form class="panel form-panel form" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+<label>Student *<select name="student_id" required>{% for s in students %}<option value="{{ s.id }}">{{ s.placement_id }} — {{ s.full_name }} ({{ s.eligibility_status }})</option>{% endfor %}</select></label>
+<label>Company *<select name="company_id" required>{% for c in companies %}<option value="{{ c.id }}">{{ c.name }} — Category {{ c.category }}</option>{% endfor %}</select></label>
+<label>Offer type *<select name="offer_type" required><option>I</option><option>F</option><option>I+F</option></select></label>
+<label>Internship stipend (₹)<input name="stipend" type="number" min="0" step="0.01" placeholder="e.g. 25000"></label>
+<label>Stipend period<select name="stipend_period"><option value="">Not specified</option><option value="monthly">Monthly</option><option value="total">Total</option><option value="other">Other</option></select></label>
+<label>Annual FTE CTC (LPA)<input name="fte_ctc_lpa" type="number" min="0" step="0.01" placeholder="e.g. 8.5"></label>
+<label class="check-label"><input type="checkbox" name="save_anyway" value="yes"> Record despite policy flags (authorized review/demo only)</label>
+<p class="muted form-wide">This starter's policy check is an initial interpretation, not an authoritative decision. Do not use the override for real cases; formal approval workflow must be built.</p>
+<div class="form-actions"><a class="btn btn-quiet" href="{{ url_for('offers') }}">Cancel</a><button class="btn btn-primary">Evaluate and record</button></div></form>{% endblock %}

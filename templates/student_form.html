@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% block content %}
+<section class="pagehead"><div><p class="eyebrow">STUDENT RECORD</p><h1>{{ 'Edit student' if student else 'Add student' }}</h1><p class="muted">Fields marked required must be completed.</p></div></section>
+<form class="panel form-panel form" method="post"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+{% if not student %}<label>Placement ID *<input name="placement_id" required maxlength="40"></label>{% else %}<label>Placement ID<input value="{{ student.placement_id }}" disabled></label>{% endif %}
+<label>Full name *<input name="full_name" value="{{ student.full_name if student else '' }}" required maxlength="160"></label>
+<label>Email *<input name="email" type="email" value="{{ student.email if student else '' }}" required></label>
+<label>Mobile number<input name="mobile" value="{{ student.mobile or '' if student else '' }}" maxlength="25"></label>
+<label>Programme *<select name="programme" required>{% for p in programmes %}<option value="{{ p }}" {% if student and student.programme == p %}selected{% endif %}>{{ p }}</option>{% endfor %}</select></label>
+<label>Batch year *<input name="batch_year" type="number" min="2000" max="2100" value="{{ student.batch_year if student else 2027 }}" required></label>
+{% if current_user.role != 'course_coordinator' %}
+<label>Registration status<select name="registration_status">{% for v in ['registered','deregistered','not_registered'] %}<option {% if student and student.registration_status == v %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+<label>Eligibility status<select name="eligibility_status">{% for v in ['pending','eligible','ineligible'] %}<option {% if student and student.eligibility_status == v %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+{% else %}<p class="muted form-wide">Placement staff control registration and eligibility decisions.</p>{% endif %}
+<div class="form-actions"><a class="btn btn-quiet" href="{{ url_for('students') }}">Cancel</a><button class="btn btn-primary">Save student</button></div>
+</form>{% endblock %}
